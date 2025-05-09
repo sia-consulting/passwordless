@@ -56,9 +56,6 @@ echo ""  # Add a line break after the password input
 read -p "Enter the Service Bus namespace name (default: sb-passwordless-$uniqueSuffix): " serviceBusNamespaceName
 serviceBusNamespaceName=${serviceBusNamespaceName:-"sb-passwordless-$uniqueSuffix"}
 
-read -p "Enter the Redis cache name (default: redis-passwordless-$uniqueSuffix): " redisCacheName
-redisCacheName=${redisCacheName:-"redis-passwordless-$uniqueSuffix"}
-
 read -p "Enter the storage account name (default: stpasswordless$uniqueSuffix): " storageAccountName
 storageAccountName=${storageAccountName:-"stpasswordless$uniqueSuffix"}
 
@@ -101,7 +98,6 @@ az deployment sub validate \
         sqlAdministratorLogin="$sqlAdministratorLogin" \
         sqlAdministratorLoginPassword="$sqlAdministratorLoginPassword" \
         serviceBusNamespaceName="$serviceBusNamespaceName" \
-        redisCacheName="$redisCacheName" \
         storageAccountName="$storageAccountName" \
         keyVaultName="$keyVaultName" \
         containerAppsEnvironmentName="$containerAppsEnvironmentName" \
@@ -129,7 +125,6 @@ az deployment sub what-if \
         sqlAdministratorLogin="$sqlAdministratorLogin" \
         sqlAdministratorLoginPassword="$sqlAdministratorLoginPassword" \
         serviceBusNamespaceName="$serviceBusNamespaceName" \
-        redisCacheName="$redisCacheName" \
         storageAccountName="$storageAccountName" \
         keyVaultName="$keyVaultName" \
         containerAppsEnvironmentName="$containerAppsEnvironmentName" \
@@ -159,7 +154,6 @@ deploymentOutput=$(az deployment sub create \
         sqlAdministratorLogin="$sqlAdministratorLogin" \
         sqlAdministratorLoginPassword="$sqlAdministratorLoginPassword" \
         serviceBusNamespaceName="$serviceBusNamespaceName" \
-        redisCacheName="$redisCacheName" \
         storageAccountName="$storageAccountName" \
         keyVaultName="$keyVaultName" \
         containerAppsEnvironmentName="$containerAppsEnvironmentName" \
@@ -182,7 +176,6 @@ echo "Container Registry: $containerRegistryName"
 echo "SQL Server: $sqlServerName"
 echo "SQL Database: $sqlDatabaseName"
 echo "Service Bus: $serviceBusNamespaceName"
-echo "Redis Cache: $redisCacheName"
 echo "Storage Account: $storageAccountName"
 echo "Key Vault: $keyVaultName"
 echo "Container Apps Environment: $containerAppsEnvironmentName"

@@ -15,10 +15,6 @@ param sqlConnectionString string
 @secure()
 param serviceBusConnectionString string
 
-@description('Redis connection string')
-@secure()
-param redisConnectionString string
-
 @description('Storage Account connection string')
 @secure()
 param storageConnectionString string
@@ -67,14 +63,6 @@ resource serviceBusConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@202
   name: 'ServiceBusConnectionString'
   properties: {
     value: serviceBusConnectionString
-  }
-}
-
-resource redisConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-  parent: keyVault
-  name: 'RedisConnectionString'
-  properties: {
-    value: redisConnectionString
   }
 }
 

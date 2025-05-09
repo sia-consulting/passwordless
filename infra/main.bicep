@@ -107,19 +107,6 @@ module serviceBus 'service-bus.bicep' = {
   ]
 }
 
-// Create Redis Cache
-module redis 'redis.bicep' = {
-  name: 'redisDeployment'
-  scope: az.resourceGroup(resourceGroupName)
-  params: {
-    redisCacheName: redisCacheName
-    location: location
-  }
-  dependsOn: [
-    managedIdentity
-  ]
-}
-
 // Create Storage Account
 module storage 'storage-account.bicep' = {
   name: 'storageDeployment'
@@ -136,7 +123,6 @@ module storage 'storage-account.bicep' = {
 // Get connection strings
 var sqlConnectionString = 'Server=${sqlServer.outputs.sqlServerFqdn};Database=${sqlDatabaseName};Authentication=Active Directory Default;TrustServerCertificate=True'
 var serviceBusConnectionString = 'Endpoint=${serviceBus.outputs.serviceBusEndpoint};Authentication=ManagedIdentity'
-var redisConnectionString = '${redis.outputs.redisCacheHostName},ssl=true,abortConnect=false,password='
 var storageConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage}'
 
 // Create Key Vault and store connection strings
@@ -149,13 +135,11 @@ module keyVault 'key-vault.bicep' = {
     managedIdentityPrincipalId: managedIdentity.outputs.managedIdentityPrincipalId
     sqlConnectionString: sqlConnectionString
     serviceBusConnectionString: serviceBusConnectionString
-    redisConnectionString: redisConnectionString
     storageConnectionString: storageConnectionString
   }
   dependsOn: [
     sqlServer
     serviceBus
-    redis
     storage
   ]
 }
@@ -192,10 +176,6 @@ module containerApps 'container-apps.bicep' = {
         value: serviceBus.outputs.serviceBusQueueName
       }
       {
-        name: 'AZURE_REDIS_HOST'
-        value: redis.outputs.redisCacheHostName
-      }
-      {
         name: 'AZURE_STORAGE_ACCOUNT'
         value: storageAccountName
       }
@@ -218,7 +198,6 @@ output sqlServerName string = sqlServer.outputs.sqlServerName
 output sqlDatabaseName string = sqlServer.outputs.sqlDatabaseName
 output serviceBusNamespaceName string = serviceBus.outputs.serviceBusNamespaceName
 output serviceBusQueueName string = serviceBus.outputs.serviceBusQueueName
-output redisCacheName string = redis.outputs.redisCacheName
 output storageAccountName string = storage.outputs.storageAccountName
 output blobEndpoint string = storage.outputs.blobEndpoint
 output containerName string = storage.outputs.containerName

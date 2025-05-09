@@ -116,7 +116,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
           image: containerImageName
           resources: {
             cpu: 1
-            memory: '1Gi'
+            memory: '2Gi'
           }
           env: concat(environmentVariables, [
               {

@@ -6,7 +6,7 @@
     Deploys Azure resources for the passwordless workshop using Bicep templates.
 .DESCRIPTION
     This script deploys all required Azure resources for the passwordless authentication workshop
-    including resource group, managed identity, SQL server, Redis, Service Bus, Storage Account, 
+    including resource group, managed identity, SQL server, Service Bus, Storage Account, 
     Key Vault, Container Registry, and Container Apps with proper RBAC assignments.
 .EXAMPLE
     ./deploy.ps1
@@ -44,6 +44,7 @@ if ([string]::IsNullOrEmpty($location)) {
 
 $uniqueSuffix = -join ((48..57) + (97..122) | Get-Random -Count 6 | ForEach-Object { [char]$_ })
 Write-Host "Generated unique suffix for resources: $uniqueSuffix" -ForegroundColor Yellow
+$uniqueSuffix = 'gn2s6x'
 
 $managedIdentityName = Read-Host -Prompt "Enter the managed identity name (default: id-passwordless-workshop)"
 if ([string]::IsNullOrEmpty($managedIdentityName)) {
@@ -77,11 +78,6 @@ $sqlAdminPasswordPlainText = [System.Runtime.InteropServices.Marshal]::PtrToStri
 $serviceBusNamespaceName = Read-Host -Prompt "Enter the Service Bus namespace name (default: sb-passwordless-$uniqueSuffix)"
 if ([string]::IsNullOrEmpty($serviceBusNamespaceName)) {
     $serviceBusNamespaceName = "sb-passwordless-$uniqueSuffix"
-}
-
-$redisCacheName = Read-Host -Prompt "Enter the Redis cache name (default: redis-passwordless-$uniqueSuffix)"
-if ([string]::IsNullOrEmpty($redisCacheName)) {
-    $redisCacheName = "redis-passwordless-$uniqueSuffix"
 }
 
 $storageAccountName = Read-Host -Prompt "Enter the storage account name (default: stpasswordless$uniqueSuffix)"
@@ -136,7 +132,6 @@ $validationResult = az deployment sub validate `
     sqlAdministratorLogin=$sqlAdministratorLogin `
     sqlAdministratorLoginPassword=$sqlAdminPasswordPlainText `
     serviceBusNamespaceName=$serviceBusNamespaceName `
-    redisCacheName=$redisCacheName `
     storageAccountName=$storageAccountName `
     keyVaultName=$keyVaultName `
     containerAppsEnvironmentName=$containerAppsEnvironmentName `
@@ -164,7 +159,6 @@ az deployment sub what-if `
     sqlAdministratorLogin=$sqlAdministratorLogin `
     sqlAdministratorLoginPassword=$sqlAdminPasswordPlainText `
     serviceBusNamespaceName=$serviceBusNamespaceName `
-    redisCacheName=$redisCacheName `
     storageAccountName=$storageAccountName `
     keyVaultName=$keyVaultName `
     containerAppsEnvironmentName=$containerAppsEnvironmentName `
@@ -194,7 +188,6 @@ $deploymentOutput = az deployment sub create `
     sqlAdministratorLogin=$sqlAdministratorLogin `
     sqlAdministratorLoginPassword=$sqlAdminPasswordPlainText `
     serviceBusNamespaceName=$serviceBusNamespaceName `
-    redisCacheName=$redisCacheName `
     storageAccountName=$storageAccountName `
     keyVaultName=$keyVaultName `
     containerAppsEnvironmentName=$containerAppsEnvironmentName `
@@ -218,7 +211,6 @@ Write-Host "Container Registry: $containerRegistryName"
 Write-Host "SQL Server: $sqlServerName"
 Write-Host "SQL Database: $sqlDatabaseName"
 Write-Host "Service Bus: $serviceBusNamespaceName"
-Write-Host "Redis Cache: $redisCacheName"
 Write-Host "Storage Account: $storageAccountName"
 Write-Host "Key Vault: $keyVaultName"
 Write-Host "Container Apps Environment: $containerAppsEnvironmentName"
