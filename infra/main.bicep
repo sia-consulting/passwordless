@@ -145,50 +145,50 @@ module keyVault 'key-vault.bicep' = {
 }
 
 // Create Container Apps with managed identity
-module containerApps 'container-apps.bicep' = {
-  name: 'containerAppsDeployment'
-  scope: az.resourceGroup(resourceGroupName)
-  params: {
-    containerAppsEnvironmentName: containerAppsEnvironmentName
-    containerAppName: containerAppName
-    location: location
-    managedIdentityId: managedIdentity.outputs.managedIdentityId
-    managedIdentityClientId: managedIdentity.outputs.managedIdentityClientId
-    containerImageName: containerImageName
-    containerRegistryLoginServer: containerRegistry.outputs.containerRegistryLoginServer
-    containerRegistryId: containerRegistry.outputs.containerRegistryId
-    keyVaultUri: keyVault.outputs.keyVaultUri
-    environmentVariables: [
-      {
-        name: 'AZURE_SQL_SERVER'
-        value: sqlServer.outputs.sqlServerFqdn
-      }
-      {
-        name: 'AZURE_SQL_DATABASE'
-        value: sqlDatabaseName
-      }
-      {
-        name: 'AZURE_SERVICEBUS_NAMESPACE'
-        value: serviceBus.outputs.serviceBusNamespaceName
-      }
-      {
-        name: 'AZURE_SERVICEBUS_QUEUE'
-        value: serviceBus.outputs.serviceBusQueueName
-      }
-      {
-        name: 'AZURE_STORAGE_ACCOUNT'
-        value: storageAccountName
-      }
-      {
-        name: 'AZURE_STORAGE_CONTAINER'
-        value: storage.outputs.containerName
-      }
-    ]
-  }
-  dependsOn: [
-    keyVault
-  ]
-}
+// module containerApps 'container-apps.bicep' = {
+//   name: 'containerAppsDeployment'
+//   scope: az.resourceGroup(resourceGroupName)
+//   params: {
+//     containerAppsEnvironmentName: containerAppsEnvironmentName
+//     containerAppName: containerAppName
+//     location: location
+//     managedIdentityId: managedIdentity.outputs.managedIdentityId
+//     managedIdentityClientId: managedIdentity.outputs.managedIdentityClientId
+//     containerImageName: containerImageName
+//     containerRegistryLoginServer: containerRegistry.outputs.containerRegistryLoginServer
+//     containerRegistryId: containerRegistry.outputs.containerRegistryId
+//     keyVaultUri: keyVault.outputs.keyVaultUri
+//     environmentVariables: [
+//       {
+//         name: 'AZURE_SQL_SERVER'
+//         value: sqlServer.outputs.sqlServerFqdn
+//       }
+//       {
+//         name: 'AZURE_SQL_DATABASE'
+//         value: sqlDatabaseName
+//       }
+//       {
+//         name: 'AZURE_SERVICEBUS_NAMESPACE'
+//         value: serviceBus.outputs.serviceBusNamespaceName
+//       }
+//       {
+//         name: 'AZURE_SERVICEBUS_QUEUE'
+//         value: serviceBus.outputs.serviceBusQueueName
+//       }
+//       {
+//         name: 'AZURE_STORAGE_ACCOUNT'
+//         value: storageAccountName
+//       }
+//       {
+//         name: 'AZURE_STORAGE_CONTAINER'
+//         value: storage.outputs.containerName
+//       }
+//     ]
+//   }
+//   dependsOn: [
+//     keyVault
+//   ]
+// }
 
 // Outputs
 output resourceGroupName string = resourceGroup.outputs.resourceGroupName
@@ -203,4 +203,4 @@ output blobEndpoint string = storage.outputs.blobEndpoint
 output containerName string = storage.outputs.containerName
 output keyVaultName string = keyVault.outputs.keyVaultName
 output keyVaultUri string = keyVault.outputs.keyVaultUri
-output containerAppUrl string = containerApps.outputs.containerAppUrl
+//output containerAppUrl string = containerApps.outputs.containerAppUrl
